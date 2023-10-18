@@ -26,6 +26,82 @@ async function run() {
   try {
     await client.connect();
   
+     const appleCollection = client.db("DeviceDynasty").collection("Apple");
+     const samsungCollection = client.db("DeviceDynasty").collection("Samsung");
+     const googleCollection = client.db("DeviceDynasty").collection("Google");
+     const sonyCollection = client.db("DeviceDynasty").collection("Sony");
+     const intelCollection = client.db("DeviceDynasty").collection("Microsoft");
+     const djiCollection = client.db("DeviceDynasty").collection("Dji");
+
+
+    //* adding the product to the specific brand collection 
+     app.post('/products',async(req,res)=>{
+      const product = req.body
+      const brand = product.brand
+      console.log(brand)
+      const filter = brand.photo
+      
+      if(brand === 'Apple'){
+        const find = await appleCollection.findOne(filter)
+        if(find){
+          res.send({result:'Duplicate'})
+        }else{
+        const result = await appleCollection.insertOne(product)
+        res.send(result)  
+        }
+        
+      }
+      if(brand === 'Samsung'){
+        const find = await samsungCollection.findOne(filter)
+        if(find){
+          res.send({result:'Duplicate'})
+        }else{
+        const result = await samsungCollection.insertOne(product)
+        res.send(result)  
+        }
+        
+      }
+      if(brand === 'Google'){
+        const find = await googleCollection.findOne(filter)
+        if(find){
+          res.send({result:'Duplicate'})
+        }else{
+        const result = await googleCollection.insertOne(product)
+        res.send(result)  
+        }
+        
+      }
+      if(brand === 'Sony'){
+        const find = await sonyCollection.findOne(filter)
+        if(find){
+          res.send({result:'Duplicate'})
+        }else{
+        const result = await sonyCollection.insertOne(product)
+        res.send(result)  
+        }
+        
+      }
+      if(brand === 'Microsoft'){
+        const find = await intelCollection.findOne(filter)
+        if(find){
+          res.send({result:'Duplicate'})
+        }else{
+        const result = await intelCollection.insertOne(product)
+        res.send(result)  
+        }
+        
+      }
+      if(brand === 'Dji'){
+        const find = await djiCollection.findOne(filter)
+        if(find){
+          res.send({result:'Duplicate'})
+        }else{
+        const result = await djiCollection.insertOne(product)
+        res.send(result)  
+        }
+        
+      }
+     })
 
 
 
