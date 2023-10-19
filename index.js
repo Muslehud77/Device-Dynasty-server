@@ -91,7 +91,7 @@ async function run() {
         }
         
       }
-      if(brand === 'Dji'){
+      if(brand === 'DJI'){
         const find = await djiCollection.findOne(filter)
         if(find){
           res.send({result:'Duplicate'})
@@ -101,6 +101,31 @@ async function run() {
         }
         
       }
+     })
+
+     app.get('/apple',async(req,res)=>{
+      const result = await appleCollection.find().toArray()
+      res.send(result)
+     })
+     app.get('/samsung',async(req,res)=>{
+      const result = await samsungCollection.find().toArray()
+      res.send(result)
+     })
+     app.get('/sony',async(req,res)=>{
+      const result = await sonyCollection.find().toArray()
+      res.send(result)
+     })
+     app.get('/microsoft',async(req,res)=>{
+      const result = await microsoftCollection.find().toArray()
+      res.send(result)
+     })
+     app.get('/dji',async(req,res)=>{
+      const result = await djiCollection.find().toArray()
+      res.send(result)
+     })
+     app.get('/google',async(req,res)=>{
+      const result = await googleCollection.find().toArray()
+      res.send(result)
      })
 
 
