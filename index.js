@@ -32,9 +32,26 @@ async function run() {
      const sonyCollection = client.db("DeviceDynasty").collection("Sony");
      const microsoftCollection = client.db("DeviceDynasty").collection("Microsoft");
      const djiCollection = client.db("DeviceDynasty").collection("Dji");
+     const cartCollection = client.db("DeviceDynasty").collection("Cart");
 
 
+    //*for cart
+    app.post('/cart',async(req,res)=>{
+      const product = req.body
+      const result = await cartCollection.insertOne(product)
+      res.send(result)
+    }) 
      
+    app.get('/cart',async(req,res)=>{
+      const result = await cartCollection.find().toArray()
+      res.send(result)
+    })
+
+    app.delete('/cart/:id',async(req,res)=>{
+      const id = {_id: new ObjectId(req.params.id)}
+      const result = await cartCollection.deleteOne(id)
+      res.send(result)
+    })
 
 
     //* adding the product to the specific brand collection 
@@ -45,10 +62,8 @@ async function run() {
       const filter = {name : product.name}
       
       
-      if(brand === 'Apple'){
-        console.log('i am here');
+      if(brand === 'Apple'){  
         const find = await appleCollection.findOne(filter)
-        console.log(find)
         if(find){
           res.send({result:'Duplicate'})
         }else{
