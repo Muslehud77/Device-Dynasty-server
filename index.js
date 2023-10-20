@@ -3,7 +3,7 @@ const cors = require('cors');
 const app = express()
 require('dotenv').config()
 const port = process.env.PORT || 5000
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 //middleware
 app.use(cors())
@@ -30,19 +30,25 @@ async function run() {
      const samsungCollection = client.db("DeviceDynasty").collection("Samsung");
      const googleCollection = client.db("DeviceDynasty").collection("Google");
      const sonyCollection = client.db("DeviceDynasty").collection("Sony");
-     const intelCollection = client.db("DeviceDynasty").collection("Microsoft");
+     const microsoftCollection = client.db("DeviceDynasty").collection("Microsoft");
      const djiCollection = client.db("DeviceDynasty").collection("Dji");
+
+
+     
 
 
     //* adding the product to the specific brand collection 
      app.post('/products',async(req,res)=>{
       const product = req.body
       const brand = product.brand
-      console.log(brand)
-      const filter = brand.photo
+      console.log(product)
+      const filter = {name : product.name}
+      
       
       if(brand === 'Apple'){
+        console.log('i am here');
         const find = await appleCollection.findOne(filter)
+        console.log(find)
         if(find){
           res.send({result:'Duplicate'})
         }else{
@@ -82,11 +88,11 @@ async function run() {
         
       }
       if(brand === 'Microsoft'){
-        const find = await intelCollection.findOne(filter)
+        const find = await microsoftCollection.findOne(filter)
         if(find){
           res.send({result:'Duplicate'})
         }else{
-        const result = await intelCollection.insertOne(product)
+        const result = await microsoftCollection.insertOne(product)
         res.send(result)  
         }
         
@@ -129,6 +135,116 @@ async function run() {
      })
 
 
+     //*get single data
+     app.get("/:id",async(req,res)=>{
+      const id = req.params.id
+      if(id.includes('Apple')){
+        const query = {_id : new ObjectId(id.replace('Apple',''))}
+        const result = await appleCollection.find(query).toArray()
+        res.send(result)
+      }
+      if(id.includes('Samsung')){
+        const query = {_id : new ObjectId(id.replace('Samsung',''))}
+        const result = await samsungCollection.find(query).toArray()
+        res.send(result)
+      }
+      if(id.includes('DJI')){
+        const query = {_id : new ObjectId(id.replace('DJI',''))}
+        const result = await djiCollection.find(query).toArray()
+        res.send(result)
+      }
+      if(id.includes('Google')){
+        const query = {_id : new ObjectId(id.replace('Google',''))}
+        const result = await googleCollection.find(query).toArray()
+        res.send(result)
+      }
+      if(id.includes('Microsoft')){
+        const query = {_id : new ObjectId(id.replace('Microsoft',''))}
+        const result = await microsoftCollection.find(query).toArray()
+        res.send(result)
+      }
+      if(id.includes('Sony')){
+        const query = {_id : new ObjectId(id.replace('Sony',''))}
+        const result = await sonyCollection.find(query).toArray()
+        res.send(result)
+      }
+      
+     });
+
+
+     //*Update single data
+     app.put("/:id",async(req,res)=>{
+      const id = req.params.id
+      const product = {$set:req.body}
+
+      if(id.includes('Apple')){
+        const query = {_id : new ObjectId(id.replace('Apple',''))}
+        const result = await appleCollection.updateOne(query,product,{ upsert: true })
+        res.send(result)
+      }
+      if(id.includes('Samsung')){
+        const query = {_id : new ObjectId(id.replace('Samsung',''))}
+        const result = await samsungCollection.updateOne(query,product,{ upsert: true })
+        res.send(result)
+      }
+      if(id.includes('DJI')){
+        const query = {_id : new ObjectId(id.replace('DJI',''))}
+        const result = await djiCollection.updateOne(query,product,{ upsert: true })
+        res.send(result)
+      }
+      if(id.includes('Google')){
+        const query = {_id : new ObjectId(id.replace('Google',''))}
+        const result = await googleCollection.updateOne(query,product,{ upsert: true })
+        res.send(result)
+      }
+      if(id.includes('Microsoft')){
+        const query = {_id : new ObjectId(id.replace('Microsoft',''))}
+        const result = await microsoftCollection.updateOne(query,product,{ upsert: true })
+        res.send(result)
+      }
+      if(id.includes('Sony')){
+        const query = {_id : new ObjectId(id.replace('Sony',''))}
+        const result = await sonyCollection.updateOne(query,product,{ upsert: true })
+        res.send(result)
+      }
+      
+     });
+
+     //* delete single data
+     app.delete("/:id",async(req,res)=>{
+      const id = req.params.id
+      if(id.includes('Apple')){
+        const query = {_id : new ObjectId(id.replace('Apple',''))}
+        const result = await appleCollection.deleteOne(query)
+        res.send(result)
+      }
+      if(id.includes('Samsung')){
+        const query = {_id : new ObjectId(id.replace('Samsung',''))}
+        const result = await samsungCollection.deleteOne(query)
+        res.send(result)
+      }
+      if(id.includes('DJI')){
+        const query = {_id : new ObjectId(id.replace('DJI',''))}
+        const result = await djiCollection.deleteOne(query)
+        res.send(result)
+      }
+      if(id.includes('Google')){
+        const query = {_id : new ObjectId(id.replace('Google',''))}
+        const result = await googleCollection.deleteOne(query)
+        res.send(result)
+      }
+      if(id.includes('Microsoft')){
+        const query = {_id : new ObjectId(id.replace('Microsoft',''))}
+        const result = await microsoftCollection.deleteOne(query)
+        res.send(result)
+      }
+      if(id.includes('Sony')){
+        const query = {_id : new ObjectId(id.replace('Sony',''))}
+        const result = await sonyCollection.deleteOne(query)
+        res.send(result)
+      }
+      
+     });
 
 
 
